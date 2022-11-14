@@ -156,7 +156,11 @@ const App = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box style={{
+      padding: "0px",
+      margin: "0px",
+      flexGrow: "1",
+    }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
