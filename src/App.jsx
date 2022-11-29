@@ -11,7 +11,6 @@ const App = () => {
     plant_name: "",
     reactors: [],
   })
-
   const [formData, setFormData] = useState({
     search: "",
   })
@@ -45,6 +44,10 @@ const App = () => {
 
           const rawRodsData = await fetch(`https://nuclear.dacoder.io/reactors/rod-state/${reactor.id}?apiKey=aff16bb6a30addb7`)
           const rodsData = await rawRodsData.json()
+
+          const rawOutputData= await fetch(`https://nuclear.dacoder.io/reactors/output/${reactor.id}?apiKey=aff16bb6a30addb7`)
+          const outputData = await rawOutputData.json()
+    
           return {
             ...reactor,
             temperature: tempData.temperature,
@@ -52,9 +55,11 @@ const App = () => {
             fuelLevel: fuelLevelData.fuel,
             state: reactorStateData.state,
             rodState: rodsData.control_rods,
+            output: outputData.output
           }
+
         }))
-        // console.log(jsonData)
+        console.log(jsonData)
         setData(jsonData)
       }
 
@@ -74,11 +79,12 @@ const App = () => {
     return (
       <div>
         <Navbar />
-        <h1>{data.plant_name}</h1>
+        <h1 style={{textAlign: "center"}}>⭐{data.plant_name}⭐</h1>
         <div className="plants-container" style={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",
+          justifyContent: "space-evenly",
+          gap: "25px",
         }}>
           <div style={{
             display: "flex",
@@ -96,6 +102,8 @@ const App = () => {
                     fuelLevel={reactor.fuelLevel}
                     state={reactor.state}
                     rodState={reactor.rodState}
+                    output={reactor.output}
+        
                   />
                 )
               })
@@ -119,6 +127,17 @@ const App = () => {
             }}
           /> */}
           </div>
+        </div>
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "97.5%",
+          backgroundColor: "blue",
+          margin: "auto",
+          marginTop: "20px",
+          height: "150px",
+        }}>
+          <p>Hello</p>
         </div>
       </div >
     )

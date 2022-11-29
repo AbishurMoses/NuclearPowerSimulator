@@ -1,12 +1,13 @@
 import Nuclear from "./nuclear.jpg";
 
-const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState }) => {
+const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output }) => {
+    // const [totalOutput] = totalOutput
+    console.log(output)
     return (
         <div style={{
             backgroundColor: "#E6E6E6",
             display: "flex",
             flexDirection: "column",
-            // alignItems: "center",
             borderRadius: "5%",
             // flexBasis: "33.33%",
         }}>
@@ -78,6 +79,10 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState }) => {
             }}>
                 <p>Rods in: {rodState.in}</p>
                 <p>Rods out: {rodState.out}</p>
+            </div>
+            <div>
+                <p>{temperature.status}</p>
+                <p>{output.amount} {output.unit}</p>
             </div>
         </div>
     )
