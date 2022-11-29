@@ -1,5 +1,35 @@
 body, html {
     margin: 0x;
     padding: 0px;
+    background-color: #EFEFEF;
 }
 
+.controlPanel {
+    display: flex;
+    flex-direction: row;
+    width: 97.5%;
+    background-color: #BFD7EA;
+    margin: auto;
+    margin-top: 20px;
+    height: 150px;
+    align-items: center;
+    background-image: url(components/controlPanel.jpg);
+    z-index: 2;
+}
+
+.myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+}
+
+.plants-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 25px;
+    z-index: -1;
+}

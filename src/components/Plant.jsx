@@ -1,7 +1,7 @@
 import Nuclear from "./nuclear.jpg";
 
 const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output }) => {
-    // const [totalOutput] = totalOutput
+    
     console.log(output)
     return (
         <div style={{
