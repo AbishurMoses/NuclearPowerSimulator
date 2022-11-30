@@ -1,8 +1,34 @@
 import Nuclear from "./nuclear.jpg";
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output }) => {
-    
-    console.log(output)
+    const [open, setOpen] = React.useState(false);
+
+    const handleChange = () => {
+        console.log("calling")
+        const changeCoolantData = fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=aff16bb6a30addb7`)
+        const coolantData = changeCoolantData.json()
+        console.log(coolantData)
+    }
+
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+
+    //     setOpen(false);
+    // };
+
+
     return (
         <div style={{
             backgroundColor: "#E6E6E6",
@@ -34,7 +60,9 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                     <p>{temperature.amount.toFixed(2)} {temperature.unit}</p>
                     {
                         Number(temperature.amount.toFixed(2)) === 22.22 ? (
-                            <p>🥶</p>
+                            <div>
+                                <p>🥶</p>
+                            </div>
                         ) : (
                             <p>😊</p>
                         )
@@ -50,7 +78,14 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                 <p>Coolant: {coolant}</p>
                 {
                     Number(fuelLevel.percentage.toFixed(2)) === 0 ? (
-                        <p>Fuel-Level: Empty</p>
+                        <div>
+                            <p>Fuel-Level: Empty</p>
+                            <Snackbar open={open} autoHideDuration={2000}>
+                                <Alert severity="warning" sx={{ width: '100%' }}>
+                                    {name} is out of fuel!
+                                </Alert>
+                            </Snackbar>
+                        </div>
                     ) : (
                         <p>Fuel-Level: {fuelLevel.percentage.toFixed(2)}</p>
                     )
@@ -62,7 +97,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                 justifyContent: "center",
                 padding: "0px 15px 0px 15px",
             }}>
-                <div className="progress-bar progress-bar-striped" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style={{ width: "200px", height: "10px", border: "1px solid black" }}></div>
+                <div className="progress-bar progress-bar-striped" role="progressbar" aria-label="Default striped example" aria-valuenow={parseInt(fuelLevel.percentage)} aria-valuemin="0" aria-valuemax="100" style={{ width: "200px", height: "10px", border: "1px solid black" }}></div>
             </div>
             <div style={{
                 display: "flex",
@@ -83,6 +118,9 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
             <div>
                 <p>{temperature.status}</p>
                 <p>{output.amount} {output.unit}</p>
+            </div>
+            <div>
+                <button onClick={handleChange}>Change Coolant</button>
             </div>
         </div>
     )

@@ -4,10 +4,12 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
+import { MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import Select from '@mui/material/Select';
+import { useState } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -52,6 +54,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  const [clicked, setClicked] = useState(false)
+  const handleClick = () => {
+    console.log("Calling")
+    setClicked(!clicked)
+    return clicked
+  }
+
   return (
     <div style={{
       padding: "0px",
@@ -65,9 +74,30 @@ const Navbar = () => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              onClick={handleClick}
             >
               <MenuIcon />
             </IconButton>
+            <div>
+              {
+                clicked ? (
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                  // value={age}
+                  // label="Age"
+                  // onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                ) : (
+                  console.log("Testing")
+                )
+              }
+
+            </div>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />

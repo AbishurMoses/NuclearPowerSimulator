@@ -6,12 +6,20 @@ import Navbar from "./components/Navbar"
 import Plant from "./components/Plant"
 import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
-import Video from "./components/BackgroundVideo"
-import Progress from "./components/Progress"
+import Video from "./components/BackgroundVideo";
+import RatingForm from "./components/RatingForm";
+// import Progress from "./components/Progress"
 
 const App = () => {
-  const [selectedValue, setSelectedValue] = React.useState('a');
-  
+  const [selectedValue, setSelectedValue] = useState('a');
+  const [clicked, setClicked] = useState(false);
+
+  // Shows System Logs. TODO
+  const handleClick = () => {
+    setClicked(!clicked)
+    return clicked
+  }
+
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
@@ -44,6 +52,8 @@ const App = () => {
         const rawOutputData = await fetch(`https://nuclear.dacoder.io/reactors/output/${reactor.id}?apiKey=aff16bb6a30addb7`)
         const outputData = await rawOutputData.json()
 
+        const rawSystemLogsData = await fetch(`https://nuclear.dacoder.io/reactors/logs/?apiKey=aff16bb6a30addb7`)
+        const systemLogsData = await rawSystemLogsData.json()
         return {
           ...reactor,
           temperature: tempData.temperature,
@@ -51,11 +61,12 @@ const App = () => {
           fuelLevel: fuelLevelData.fuel,
           state: reactorStateData.state,
           rodState: rodsData.control_rods,
-          output: outputData.output
+          output: outputData.output,
+          logs: systemLogsData
         }
 
       }))
-      // console.log(jsonData)
+      console.log(jsonData)
       setData(jsonData)
     }
 
@@ -69,18 +80,23 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    console.log(data)
+    // console.log(data)
   })
 
   return (
-    <div style={{margin: "0px"}}>
+    <div style={{ margin: "0px" }}>
       <Video />
       <Navbar />
-      <Progress />
       <h1 style={{
-         textAlign: "center" 
-         }}>⭐{data.plant_name}⭐</h1>
-      <div className = "plants-container">
+        textAlign: "center"
+      }}>⭐{data.plant_name}⭐</h1>
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+      }}>
+        <RatingForm />
+      </div>
+      <div className="plants-container">
         <div style={{
           display: "flex",
           flexDirection: "row",
@@ -139,13 +155,13 @@ const App = () => {
           display: "flex",
           flexDirection: "column",
         }}>
-          <p style={{ textAlign: "center", paddingRight: "30px", color: "white"}}>Coolants All</p>
+          <p style={{ textAlign: "center", paddingRight: "30px", color: "white" }}>Coolants All</p>
           <div style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
           }}>
-            <p style={{color: "white"}}>Disable</p>
+            <p style={{ color: "white" }}>Disable</p>
             <div>
               <Radio
                 checked={selectedValue === 'disable'}
@@ -155,7 +171,7 @@ const App = () => {
                 inputProps={{ 'aria-label': 'Disable' }}
               />
             </div>
-            <p style={{color: "white"}}>Enable</p>
+            <p style={{ color: "white" }}>Enable</p>
             <div>
             </div>
             <Radio
@@ -173,11 +189,20 @@ const App = () => {
           gap: "10px"
         }}>
           <div>
-            <Button variant="contained" >System Logs</Button>
+            <Button variant="contained" onClick={handleClick}>System Logs</Button>
           </div>
           <div>
             <Button variant="contained">Temperature Graph</Button>
           </div>
+          {/* <div>
+            {
+              clicked ? (
+
+              ): (
+
+                )
+            }
+          </div> */}
         </div>
       </div>
     </div >
