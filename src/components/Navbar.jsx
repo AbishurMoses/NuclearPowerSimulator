@@ -10,6 +10,7 @@ import { MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Select from '@mui/material/Select';
 import { useState } from 'react';
+import GeneralInfo from './GeneralInfo';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -81,24 +82,17 @@ const Navbar = () => {
             <div>
               {
                 clicked ? (
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                  // value={age}
-                  // label="Age"
-                  // onChange={handleChange}
-                  >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
+                  <div>
+                    <GeneralInfo />
+                    <p>Working</p>
+                  </div>
                 ) : (
-                  console.log("Testing")
+                  ""
                 )
               }
 
             </div>
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -106,7 +100,7 @@ const Navbar = () => {
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
               />
-            </Search>
+            </Search> */}
           </Toolbar>
         </AppBar>
       </Box>
