@@ -60,7 +60,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                 }}>
                     <p>{temperature.amount.toFixed(2)} {temperature.unit}</p>
                     {
-                        Number(temperature.amount.toFixed(2)) === 22.22 ? (
+                        Number(temperature.amount.toFixed(2)) === 22.22 && temperature.unit === "celcius" || Number(temperature.amount.toFixed(2)) === 72 && temperature.unit === "fahrenheit"? (
                             <div>
                                 <p>🥶</p>
                             </div>
