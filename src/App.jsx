@@ -148,7 +148,7 @@ const App = () => {
             width: "30%",
             height: "90%"
           }}>
-            Controled Shutdown
+            Controlled Shutdown
           </div>
         </div>
         <div style={{

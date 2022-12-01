@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { LinearProgress } from "@mui/material";
 
 
 const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output }) => {
@@ -97,7 +98,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                 justifyContent: "center",
                 padding: "0px 15px 0px 15px",
             }}>
-                <div className="progress-bar progress-bar-striped" role="progressbar" aria-label="Default striped example" aria-valuenow={parseInt(fuelLevel.percentage)} aria-valuemin="0" aria-valuemax="100" style={{ width: "200px", height: "10px", border: "1px solid black" }}></div>
+                <LinearProgress variant="determinate" value={parseFloat(fuelLevel.percentage.toFixed(2))} />
             </div>
             <div style={{
                 display: "flex",
