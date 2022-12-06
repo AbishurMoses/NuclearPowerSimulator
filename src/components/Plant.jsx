@@ -103,7 +103,6 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                     <p>{temperature.status}</p>
                     <p>{output.amount} {output.unit}</p>
                 </div>
-                
             </div>
         </div>
 

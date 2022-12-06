@@ -1,0 +1,48 @@
+body,
+html {
+    margin: 0px;
+    padding: 0px;
+    background: rgb(63, 94, 251);
+    background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+}
+
+.controlPanel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 97.5%;
+    background-color: #BFD7EA;
+    border-radius: 12rem 0 12rem 0;
+    margin: auto;
+    height: 150px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 15px;
+}
+
+.myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+}
+
+.plants-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 25px;
+    z-index: -1;
+}
+
+.plants-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5%;
+    background: rgb(212, 224, 224);
+    background: linear-gradient(0deg, rgba(212, 224, 224, 0.023313549052433435) 0%, rgba(145, 135, 112, 0.11294940339417014) 100%);
+}
