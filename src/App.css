@@ -9,14 +9,17 @@ html {
 .controlPanel {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     width: 97.5%;
     background-color: #BFD7EA;
+    border-radius: 12rem 0 12rem 0;
     margin: auto;
-    margin-top: 20px;
     height: 150px;
-    align-items: center;
-    background-image: url(components/controlPanel.jpg);
-    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 15px;
 }
 
 .myVideo {
