@@ -40,6 +40,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                     flexDirection: "row",
                     justifyContent: "center",
                     padding: "0px 15px 0px 15px",
+                    // gap: "10px",
                 }}>
                     <div style={{
                         display: "flex",
@@ -52,9 +53,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                         {
                             Number(temperature.amount.toFixed(2)) === 72 && temperature.unit === "fahrenheit" || Number(temperature.amount.toFixed(2)) === 22.22 && temperature.unit === "celsius" ? (
                                 <div>
-                                    {/* <SnackbarProvider /> */}
                                     <p>🥶</p>
-                                    {/* <Button onClick={snackLogs}>Show snackbar</Button> */}
                                 </div>
                             ) : (
                                 <p>😊</p>
@@ -69,6 +68,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                     padding: "0px 15px 0px 15px",
                 }}>
                     <p>Coolant: {coolant}</p>
+                    <p>Reactor State: {state}</p>
                 </div>
                 <div className="progress" style={{
                     display: "flex",
@@ -85,13 +85,6 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                 </div>
                 <div style={{
                     display: "flex",
-                    justifyContent: "center",
-                    padding: "0px 15px 0px 15px"
-                }}>
-                    <p>Reactor State: {state}</p>
-                </div>
-                <div style={{
-                    display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
                     padding: "0px 15px 0px 15px",
@@ -99,8 +92,8 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output 
                     <p>Rods in: {rodState.in}</p>
                     <p>Rods out: {rodState.out}</p>
                 </div>
-                <div>
-                    <p>{temperature.status}</p>
+                <div style={{display: "flex", alignItems: "center", flexDirection: "column", paddingTop: "-10px"}}>
+                    <p >Temperature Status: {temperature.status}</p>
                     <p>{output.amount} {output.unit}</p>
                 </div>
             </div>

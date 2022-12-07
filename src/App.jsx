@@ -4,21 +4,22 @@ import { useEffect } from "react"
 import { useState } from "react"
 import Navbar from "./components/Navbar"
 import Plant from "./components/Plant"
-import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import Video from "./components/BackgroundVideo";
 import RatingForm from "./components/RatingForm";
 import GeneralInfo from "./components/GeneralInfo";
-// import { SnackbarProvider } from 'notistack';
-
 
 const App = () => {
-  const [selectedValue, setSelectedValue] = useState('a');
   const [clicked, setClicked] = useState(false);
   const [totalMega, setTotalMega] = useState(0);
   const [loadingDisplay, setLoadingDisplay] = useState(true);
   const [isResetting, setIsResetting] = useState(false);
   const [explode, setExplode] = useState(false);
+  const defaultData = {
+    plant_name: "",
+    reactors: [],
+  }
+  const [data, setData] = useState(defaultData);
 
   useEffect(() => {
     setTimeout(() => {
@@ -47,8 +48,6 @@ const App = () => {
   }
   // Change Temperature
   const handleClickF = () => {
-    console.log("calling F")
-    alert("Temperature has been changed Fahrenheit")
     fetch("https://nuclear.dacoder.io/reactors/temperature?apiKey=aff16bb6a30addb7", {
       headers: {
         'Accept': 'application/json',
@@ -61,7 +60,6 @@ const App = () => {
     })
   }
   const handleClickC = () => {
-    alert("Temperature has been changed to Celsius")
     fetch("https://nuclear.dacoder.io/reactors/temperature?apiKey=aff16bb6a30addb7", {
       headers: {
         'Accept': 'application/json',
@@ -73,21 +71,6 @@ const App = () => {
       method: "POST",
     })
   }
-
-  const handleClickLogs = () => {
-    GeneralInfo()
-  }
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
-  const defaultData = {
-    plant_name: "",
-    reactors: [],
-  }
-
-  const [data, setData] = useState(defaultData)
 
   useEffect(() => {
     const getData = async () => {
@@ -127,15 +110,14 @@ const App = () => {
           }
         }))
 
-        let total = 0
+        let totalMega = 0
         for (let reactor of jsonData.reactors) {
-          total += reactor.output.amount
+          totalMega += reactor.output.amount
         }
+        setTotalMega(totalMega)
 
-        setTotalMega(total)
-
+        // console.log(jsonData)
         setData(jsonData)
-        // console.log(totalMega)
       }
     }
 
@@ -149,28 +131,82 @@ const App = () => {
 
   }, [])
 
+  const disableAll = () => {
+    for (let reactor of data.reactors) {
+      console.log(reactor.id)
+      if (reactor.coolant === "off") {
+        console.log("Ignore")
+      }
+      else {
+        fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=aff16bb6a30addb7`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "coolant": "off"
+          }),
+          method: "POST",
+        })
+      }
+    }
+  }
+
+  const enableAll = () => {
+    for (let reactor of data.reactors) {
+      console.log(reactor.id)
+      if (reactor.coolant === "on") {
+        console.log("Ignore")
+      }
+      else {
+        fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=aff16bb6a30addb7`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "coolant": "on"
+          }),
+          method: "POST",
+        })
+      }
+    }
+  }
+
+  const handleControlledShutdown = () => {
+    for (let reactor of data.reactors) {
+        fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=aff16bb6a30addb7`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: "POST",
+        })
+    }
+  }
+
   const handleExplosion = () => {
     setExplode(!explode)
   }
 
   return (
-    <div style={{
-      height: "100%"
-    }}>
-      <div>
-        {
-          loadingDisplay ? (
-            <Video />
-          ) : (
+    <div className="mainContainer">
+      {
+        loadingDisplay ? (
+          <Video />
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <Navbar />
               <div>
                 <Button variant="contained" onClick={handleClickReset}>Reset</Button>
                 <Button variant="contained" onClick={handleClickF}>Fahrenheit</Button>
                 <Button variant="contained" onClick={handleClickC}>Celsius</Button>
-                <Button variant="contained" onClick={handleClickLogs}>Reactor Logs</Button>
+                <Button variant="contained">Reactor Logs</Button>
                 <Button variant="contained" onClick={handleExplosion}>Give Up</Button>
               </div>
+            </div>
+            <div>
               <h1 style={{
                 textAlign: "center"
               }}>{data.plant_name}</h1>
@@ -206,6 +242,8 @@ const App = () => {
                   }
                 </div>
               </div>
+            </div>
+            <div>
               <div className="controlPanel">
                 <div style={{
                   display: "flex",
@@ -224,22 +262,12 @@ const App = () => {
                   }}>
                     EMERGENCY SHUTDOWN
                   </div>
-                  <div style={{
-                    display: "flex",
-                    borderRadius: "100%",
-                    backgroundColor: "#6779B0",
-                    alignItems: "center",
-                    textAlign: "center",
-                    width: "30%",
-                    height: "90%"
-                  }}>
-                    Controlled Shutdown
-                  </div>
+                  <button className="controlled-button" onClick={handleControlledShutdown}>Controlled Shutdown</button>
                 </div>
                 <div>
-                  <Button>
-                    Global Maintenance
-                  </Button>
+                  {/* <Button onClick={globalRefuel}>
+                    Global Refuel
+                  </Button> */}
                 </div>
                 <div style={{
                   display: "flex",
@@ -251,26 +279,8 @@ const App = () => {
                     flexDirection: "row",
                     alignItems: "center",
                   }}>
-                    <p style={{ color: "white" }}>Disable</p>
-                    <div>
-                      <Radio
-                        checked={selectedValue === 'disable'}
-                        onChange={handleChange}
-                        value="disable"
-                        name="coolant-disable"
-                        inputProps={{ 'aria-label': 'Disable' }}
-                      />
-                    </div>
-                    <p style={{ color: "white" }}>Enable</p>
-                    <div>
-                    </div>
-                    <Radio
-                      checked={selectedValue === 'enable'}
-                      onChange={handleChange}
-                      value="enable"
-                      name="coolant-enable"
-                      inputProps={{ 'aria-label': 'Enable' }}
-                    />
+                    <Button onClick={disableAll}>Disable</Button>
+                    <Button onClick={enableAll}>Enable</Button>
                   </div>
                 </div>
                 <div style={{
@@ -290,10 +300,10 @@ const App = () => {
                 </div>
               </div>
             </div>
-          )
-        }
-      </div>
-    </div >
+          </div>
+        )
+      }
+    </div>
   )
 }
 
