@@ -16,3 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </React.StrictMode>
   </SnackbarProvider>
 )
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+  },
+]);
+
+
