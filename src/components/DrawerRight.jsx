@@ -27,7 +27,6 @@ const DrawerRight = (props) => {
       return [...prevAvgTemp, temp].splice(-300)
     })
   }
-  // console.log(avgTemp)
 
   useEffect(() => {
     const intervalId = setInterval(fetchNum, 1000)
@@ -98,11 +97,17 @@ const DrawerRight = (props) => {
             onClose={toggleDrawer(anchor, false)}
           >
             <List anchor={anchor} avgTemp={avgTemp} />
-            {/* <div>
-              {logs.map(log => <div>{log}</div>)}
-            </div> */}
-            <div>
-              <h1>Logs FIXME!</h1>
+            <div style={{display: "flex", flexDirection:"row"}}>
+              <div>
+                {
+                  logs.map(log => {
+                    return <p className="display-logs">{log}</p>
+                  })
+                }
+              </div>
+              <div>
+
+              </div>
             </div>
           </Drawer>
         </React.Fragment>

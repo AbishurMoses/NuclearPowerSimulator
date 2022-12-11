@@ -6,12 +6,11 @@ import Navbar from "./components/Navbar"
 import Plant from "./components/Plant"
 import Button from '@mui/material/Button';
 import Video from "./components/BackgroundVideo";
-import DrawerRight from "./components/Drawer";
-import {SnackbarProvider, useSnackbar } from "notistack";
+import DrawerRight from "./components/DrawerRight";
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 const App = () => {
   // const APIKEY = aff16bb6a30addb7
-  // const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [clicked, setClicked] = useState(false);
   const [avgTemp, setAvgTemp] = useState(0);
   const [totalMega, setTotalMega] = useState(0);
@@ -104,11 +103,10 @@ const App = () => {
           const rawSystemLogsData = await fetch(`https://nuclear.dacoder.io/reactors/logs/?apiKey=aff16bb6a30addb7`)
           const systemLogsData = await rawSystemLogsData.json()
 
-          const flattened = systemLogsData.flatMap(num => num);
+          const flattened = systemLogsData.flatMap((obj) => {
+            return Object.keys(obj).flatMap(key => obj[key])
+          })
           setTotalLogs(flattened)
-          console.log(totalLogs)
-          // console.log(outputData.output.amount)
-
 
           return {
             ...reactor,
@@ -118,11 +116,10 @@ const App = () => {
             state: reactorStateData.state,
             rodState: rodsData.control_rods,
             output: outputData.output,
-
           }
         }))
         setData(jsonData)
-        
+
         let totalMega = 0
         let totalTemp = 0
 
@@ -229,9 +226,9 @@ const App = () => {
       method: "PUT",
     })
     const message = `Your name has been changed to ${newName}`
-    enqueueSnackbar(message, 
-      {autoHideDuration: 5000 }, 
-      )
+    enqueueSnackbar(message,
+      { autoHideDuration: 5000 },
+    )
   }
 
   return (
@@ -311,7 +308,7 @@ const App = () => {
                   display: "flex",
                   flexDirection: "column",
                 }}>
-                  
+
                   <div style={{
                     display: "flex",
                     flexDirection: "row",
@@ -321,9 +318,9 @@ const App = () => {
                     <Button onClick={disableAll}>Disable</Button>
                     <Button onClick={enableAll}>Enable</Button>
                     <DrawerRight
-                    temp={avgTemp}
-                    logs={totalLogs}
-                  />
+                      temp={avgTemp}
+                      logs={totalLogs}
+                    />
                   </div>
                 </div>
               </div>

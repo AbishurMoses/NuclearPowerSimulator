@@ -2,14 +2,13 @@ import Nuclear from "../assets/images/nuclear.jpg";
 import * as React from 'react';
 import MuiAlert from '@mui/material/Alert';
 import { LinearProgress } from "@mui/material";
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useEffect } from "react";
 import { useState } from "react";
 
 const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output, id }) => {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const [isCaution, setIsCaution] = useState(true)
-    // console.log(output.amount)
 
     useEffect(() => {
         if (temperature.state === "Caution") {
@@ -31,15 +30,11 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output,
 
     const test = () => {
         console.log("calling")
-        redirect(`'/${id}`)
+        navigate(`/${id}`)
     }
 
-    // console.log(id)
-
     return (
-        <div onClick={() => {
-            navigate(`/${id}`)
-        }} className={
+        <div onClick={test} className={
             isCaution ? "plants-safe" : "plants-caution"
         }>
             {/* Name of Plant */}
@@ -62,9 +57,7 @@ const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output,
                 <p>{temperature.amount.toFixed(2)} {temperature.unit}</p>
                 {
                     Number(temperature.amount.toFixed(2)) === 72 && temperature.unit === "fahrenheit" || Number(temperature.amount.toFixed(2)) === 22.22 && temperature.unit === "celsius" ? (
-                        <div>
-                            <p>🥶</p>
-                        </div>
+                        <p>🥶</p>
                     ) : (
                         <p>😊</p>
                     )

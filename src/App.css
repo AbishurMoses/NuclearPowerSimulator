@@ -80,3 +80,8 @@ html {
     width: 100% !important;
     height: 50% !important;
 }
+
+.display-logs {
+    padding: 0px 10px 0px 10px;
+    max-width: 50vw
+}
