@@ -107,10 +107,7 @@ const App = () => {
           const flattened = systemLogsData.flatMap(num => num);
           setTotalLogs(flattened)
 
-          // totalLogs.forEach((logs) => {
-            
-          // })
-          // console.log(flattened)
+          // console.log(outputData.output.amount)
 
 
           return {
@@ -125,6 +122,7 @@ const App = () => {
           }
         }))
         setData(jsonData)
+        
 
         let totalMega = 0
         let totalTemp = 0
