@@ -7,8 +7,7 @@ import Plant from "./components/Plant"
 import Button from '@mui/material/Button';
 import Video from "./components/BackgroundVideo";
 import DrawerRight from "./components/Drawer";
-// import {SnackbarProvider, useSnackbar, enqueueSnackbar} from "notistack";
-// import Snackbar from "./components/Snackbar";s
+import {SnackbarProvider, useSnackbar } from "notistack";
 
 const App = () => {
   // const APIKEY = aff16bb6a30addb7
@@ -24,6 +23,7 @@ const App = () => {
     reactors: [],
   }
   const [data, setData] = useState(defaultData);
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     setTimeout(() => {
@@ -106,7 +106,7 @@ const App = () => {
 
           const flattened = systemLogsData.flatMap(num => num);
           setTotalLogs(flattened)
-
+          console.log(totalLogs)
           // console.log(outputData.output.amount)
 
 
@@ -123,7 +123,6 @@ const App = () => {
         }))
         setData(jsonData)
         
-
         let totalMega = 0
         let totalTemp = 0
 
@@ -229,10 +228,10 @@ const App = () => {
       }),
       method: "PUT",
     })
-    // const message = "Your name has been changed"
-    // enqueueSnackbar(message, 
-    //   {autoHideDuration: 1000 }, 
-    //   )
+    const message = `Your name has been changed to ${newName}`
+    enqueueSnackbar(message, 
+      {autoHideDuration: 5000 }, 
+      )
   }
 
   return (

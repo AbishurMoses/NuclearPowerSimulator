@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 // import GalleryItem from './routes/GalleryItem';
-// import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 
 // const router = createBrowserRouter([
 //   {
@@ -22,8 +22,10 @@ import './index.css'
 // ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
+  <React.StrictMode>
+    <SnackbarProvider maxSnack={3} >
       {/* <RouterProvider router={router} /> */}
       <App />
-    </React.StrictMode>
+    </SnackbarProvider>
+  </React.StrictMode>
 )

@@ -9,7 +9,7 @@ import { useState } from "react";
 const Plant = ({ name, temperature, coolant, fuelLevel, state, rodState, output, id }) => {
     // const navigate = useNavigate()
     const [isCaution, setIsCaution] = useState(true)
-    console.log(output.amount)
+    // console.log(output.amount)
 
     useEffect(() => {
         if (temperature.state === "Caution") {
