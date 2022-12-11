@@ -1,13 +1,29 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+// import {
+//   createBrowserRouter,
+//   RouterProvider,
+//   Route,
+// } from "react-router-dom";
 import App from './App'
-import { SnackbarProvider } from 'notistack'
 import './index.css'
+// import GalleryItem from './routes/GalleryItem';
+// import { SnackbarProvider } from 'notistack';
+
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <SnackbarProvider macSnack={3}><App /></SnackbarProvider>
+//   },
+//   {
+//     path: "/:id",
+//     element: <GalleryItem />
+//   }
+// ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <SnackbarProvider maxSnack={3}>
     <React.StrictMode>
+      {/* <RouterProvider router={router} /> */}
       <App />
     </React.StrictMode>
-  </SnackbarProvider>
 )

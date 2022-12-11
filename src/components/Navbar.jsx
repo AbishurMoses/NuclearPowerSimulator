@@ -55,12 +55,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-  const [clicked, setClicked] = useState(false)
-  const handleClick = () => {
-    console.log("Calling")
-    setClicked(!clicked)
-    return clicked
-  }
 
   return (
     <div style={{
@@ -75,32 +69,9 @@ const Navbar = () => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
-              onClick={handleClick}
             >
               <MenuIcon />
             </IconButton>
-            <div>
-              {
-                clicked ? (
-                  <div>
-                    <GeneralInfo />
-                    <p>Working</p>
-                  </div>
-                ) : (
-                  ""
-                )
-              }
-
-            </div>
-            {/* <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search> */}
           </Toolbar>
         </AppBar>
       </Box>

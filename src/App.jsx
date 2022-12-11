@@ -6,15 +6,19 @@ import Navbar from "./components/Navbar"
 import Plant from "./components/Plant"
 import Button from '@mui/material/Button';
 import Video from "./components/BackgroundVideo";
-import RatingForm from "./components/RatingForm";
-import GeneralInfo from "./components/GeneralInfo";
+import DrawerRight from "./components/Drawer";
+// import {SnackbarProvider, useSnackbar, enqueueSnackbar} from "notistack";
+// import Snackbar from "./components/Snackbar";s
 
 const App = () => {
+  // const APIKEY = aff16bb6a30addb7
+  // const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [clicked, setClicked] = useState(false);
+  const [avgTemp, setAvgTemp] = useState(0);
   const [totalMega, setTotalMega] = useState(0);
   const [loadingDisplay, setLoadingDisplay] = useState(true);
   const [isResetting, setIsResetting] = useState(false);
-  const [explode, setExplode] = useState(false);
+  const [totalLogs, setTotalLogs] = useState([])
   const defaultData = {
     plant_name: "",
     reactors: [],
@@ -77,6 +81,7 @@ const App = () => {
       if (!isResetting) {
         const raw = await fetch("https://nuclear.dacoder.io/reactors?apiKey=aff16bb6a30addb7")
         const jsonData = await raw.json()
+        // console.log(jsonData)
         jsonData.reactors = await Promise.all(jsonData.reactors.map(async reactor => {
           const rawTempData = await fetch(`https://nuclear.dacoder.io/reactors/temperature/${reactor.id}?apiKey=aff16bb6a30addb7`)
           const tempData = await rawTempData.json()
@@ -98,6 +103,16 @@ const App = () => {
 
           const rawSystemLogsData = await fetch(`https://nuclear.dacoder.io/reactors/logs/?apiKey=aff16bb6a30addb7`)
           const systemLogsData = await rawSystemLogsData.json()
+
+          const flattened = systemLogsData.flatMap(num => num);
+          setTotalLogs(flattened)
+
+          // totalLogs.forEach((logs) => {
+            
+          // })
+          // console.log(flattened)
+
+
           return {
             ...reactor,
             temperature: tempData.temperature,
@@ -106,18 +121,20 @@ const App = () => {
             state: reactorStateData.state,
             rodState: rodsData.control_rods,
             output: outputData.output,
-            logs: systemLogsData
+
           }
         }))
+        setData(jsonData)
 
         let totalMega = 0
+        let totalTemp = 0
+
         for (let reactor of jsonData.reactors) {
           totalMega += reactor.output.amount
+          totalTemp += reactor.temperature.amount
         }
         setTotalMega(totalMega)
-
-        // console.log(jsonData)
-        setData(jsonData)
+        setAvgTemp(totalTemp / jsonData.reactors.length)
       }
     }
 
@@ -133,7 +150,7 @@ const App = () => {
 
   const disableAll = () => {
     for (let reactor of data.reactors) {
-      console.log(reactor.id)
+      // console.log(reactor.id)
       if (reactor.coolant === "off") {
         console.log("Ignore")
       }
@@ -175,18 +192,49 @@ const App = () => {
 
   const handleControlledShutdown = () => {
     for (let reactor of data.reactors) {
-        fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=aff16bb6a30addb7`, {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          method: "POST",
-        })
+      fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=aff16bb6a30addb7`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+      })
+    }
+  }
+
+  const handleEmergencyShutdown = () => {
+    for (let reactor of data.reactors) {
+      fetch(`https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=aff16bb6a30addb7`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+      })
     }
   }
 
   const handleExplosion = () => {
-    setExplode(!explode)
+    alert("You wish")
+  }
+
+  const handleChangeName = () => {
+    const newName = prompt('Please pick a name')
+    console.log("running")
+    fetch(`https://nuclear.dacoder.io/reactors/plant-name?apiKey=aff16bb6a30addb7`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "name": `${newName}`
+      }),
+      method: "PUT",
+    })
+    // const message = "Your name has been changed"
+    // enqueueSnackbar(message, 
+    //   {autoHideDuration: 1000 }, 
+    //   )
   }
 
   return (
@@ -202,45 +250,44 @@ const App = () => {
                 <Button variant="contained" onClick={handleClickReset}>Reset</Button>
                 <Button variant="contained" onClick={handleClickF}>Fahrenheit</Button>
                 <Button variant="contained" onClick={handleClickC}>Celsius</Button>
-                <Button variant="contained">Reactor Logs</Button>
                 <Button variant="contained" onClick={handleExplosion}>Give Up</Button>
               </div>
             </div>
             <div>
-              <h1 style={{
-                textAlign: "center"
-              }}>{data.plant_name}</h1>
               <div style={{
                 display: "flex",
+                flexDirection: "row",
                 justifyContent: "center",
+                alignItems: "center",
+                gap: "10px"
               }}>
-                <RatingForm />
-              </div>
-              <div className="plants-container">
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "25px",
-                  justifyContent: "center"
-                }}>
-                  {
-                    data.reactors.map(reactor => {
-                      return (
-                        <Plant
-                          key={reactor.id}
-                          name={reactor.name}
-                          temperature={reactor.temperature}
-                          coolant={reactor.coolant}
-                          fuelLevel={reactor.fuelLevel}
-                          state={reactor.state}
-                          rodState={reactor.rodState}
-                          output={reactor.output}
-
-                        />
-                      )
-                    })
-                  }
+                <h1 onClick={handleChangeName}
+                  style={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                  }}>{data.plant_name}</h1>
+                <div>
+                  <h2 style={{ color: "white" }}>Output: {(totalMega / 1000).toFixed(2)} GW</h2>
                 </div>
+              </div>
+              <div className="main-plants-container">
+                {
+                  data.reactors.map(reactor => {
+                    return (
+                      <Plant
+                        key={reactor.id}
+                        name={reactor.name}
+                        temperature={reactor.temperature}
+                        coolant={reactor.coolant}
+                        fuelLevel={reactor.fuelLevel}
+                        state={reactor.state}
+                        rodState={reactor.rodState}
+                        output={reactor.output}
+                        id={reactor.id}
+                      />
+                    )
+                  })
+                }
               </div>
             </div>
             <div>
@@ -252,50 +299,34 @@ const App = () => {
                   height: "75%",
                   gap: "20px"
                 }}>
-                  <div style={{
-                    display: "flex",
-                    borderRadius: "100%",
-                    backgroundColor: "#FF6663",
-                    alignItems: "center",
-                    textAlign: "center",
-                    width: "40%"
-                  }}>
-                    EMERGENCY SHUTDOWN
-                  </div>
                   <button className="controlled-button" onClick={handleControlledShutdown}>Controlled Shutdown</button>
                 </div>
-                <div>
-                  {/* <Button onClick={globalRefuel}>
-                    Global Refuel
-                  </Button> */}
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "20%",
+                  height: "75%",
+                  gap: "20px"
+                }}>
+                  <button className="emergency-button" onClick={handleEmergencyShutdown}>Emergency Shutdown</button>
                 </div>
                 <div style={{
                   display: "flex",
                   flexDirection: "column",
                 }}>
-                  <p style={{ textAlign: "center", paddingRight: "30px", color: "white" }}>Coolants All</p>
+                  
                   <div style={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
                   }}>
+                    <p style={{ textAlign: "center", paddingRight: "5px", color: "white" }}>Coolants All: </p>
                     <Button onClick={disableAll}>Disable</Button>
                     <Button onClick={enableAll}>Enable</Button>
-                  </div>
-                </div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px"
-                }}>
-                  <div>
-                    <Button variant="contained" onClick={handleClick}>System Logs</Button>
-                  </div>
-                  <div>
-                    <Button variant="contained">Temperature Graph</Button>
-                  </div>
-                  <div>
-                    <p style={{ color: "white" }}>Total Gigawatts: {(totalMega / 1000).toFixed(2)} GW</p>
+                    <DrawerRight
+                    temp={avgTemp}
+                    logs={totalLogs}
+                  />
                   </div>
                 </div>
               </div>
