@@ -29,12 +29,7 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-loading": "^2.0.3",
-<<<<<<< HEAD
-    "react-router-dom": "^6.4.5",
-    "sort-by": "^1.2.0"
-=======
     "react-router-dom": "^6.4.5"
->>>>>>> 93d84edb502ac4b78f3639d83bfd3f0f08d1a073
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
